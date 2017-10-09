@@ -1,20 +1,28 @@
 //globals
-var d = document.createElement("DIV");
+var circles = [];
+
+//var d = document.createElement("DIV");
+//var d2 = document.createElement("DIV");
+
 var speed = 25;
 var distance = 10;
+
+var current=0;
+
 function run(){
-    drawCircle("yellow",11,80,50);
-//    drawCircle("yellow",11,60,50);
-//    drawCircle("yellow",11,40,50);
+    circles.push(drawCircle("yellow",11,40,50));
+    circles.push(drawCircle("red",11,80,50));
+    circles.push(drawCircle("blue",11,120,50));
+    circles.push(drawCircle("green",11,160,50));
 }
 
 
 
 function drawCircle(colour,radius,x,y){
-    
-    d.style.position="absolute";
-    d.style.left=x;
-    d.style.top=y;
+    var div = document.createElement("DIV");
+    div.style.position="absolute";
+    div.style.left=x;
+    div.style.top=y;
     
     var c = document.createElement("CANVAS");
 
@@ -25,32 +33,63 @@ function drawCircle(colour,radius,x,y){
     ctx.fill();
     ctx.stroke();
     
-    d.appendChild(c);
+    div.appendChild(c);
     
-    document.body.appendChild(d);
+    document.body.appendChild(div);
+    return div;
 }
 function keys(event){
-    //w=119 s=115 a=97 d=100 enter=13
+    //w=119 s=115 a=97 d=100 enter=13 space=32
     
     var e = event.keyCode;
     
   //alert(e)
     
    if(e=="100"){
-        d.style.left=(parseInt(d.style.left)+speed) + "px";
+       move(speed,"right");
     }
     else if(e=="119"){
-        d.style.top=(parseInt(d.style.top)-speed) + "px";
+        move(speed,"up");
     }
     else if(e=="115"){
-        d.style.top=(parseInt(d.style.top)+speed) + "px";
+        move(speed,"down");
     }
     else if(e=="97"){
-        d.style.left=(parseInt(d.style.left)-speed) + "px";
+        move(speed,"left");
    }
+   else if(e=="32"){
+       current++;
+       if(current>(circles.length-1)){
+           current=0;
+       }
 
+       
+   }
 }
-
+function move(howFar,direction){
+    
+    d=circles[current];
+    
+    var x=parseInt(d.style.left);
+    var y=parseInt(d.style.top);
+    
+    
+    if(direction=="left"){
+        x=x-howFar;
+        
+    }
+    else if(direction=="right"){
+        x=x+howFar;
+    }
+    else if(direction=="up"){
+        y=y-howFar;
+    }
+    else if(direction=="down"){
+        y=y+howFar;
+    }
+    d.style.left=x+"px";
+    d.style.top=y+"px";
+}
     
     
    
