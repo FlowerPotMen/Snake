@@ -6,6 +6,8 @@ var snakeLength = 1;
 var distance = 20;
 var current = 0;
 var colour = "yellow";
+var timer;
+var speed = 100;
 
 function run() {
     var x = window.innerWidth / 2;
@@ -29,22 +31,32 @@ function run() {
 
 
     //keeps snake moving
-    setInterval(function () {
-        for (i = 0; i < circles.length; i++) {
-            currentX = circles[i].x;
-            currentY = circles[i].y;
-            if (i == 0) {
-                circles[i].move(distance, direction);
-            } else {
-                circles[i].setPosition(nextX, nextY);
-            }
-            nextX = currentX;
-            nextY = currentY;
+    moveSnake();
+
+}
+function moveSnake() {
+
+    if (timer) {
+        clearInterval(timer);
+    }
+
+    timer = setInterval(function () {
+
+        currentX = circles[0].x;
+        currentY = circles[0].y;
+        var end = circles.pop();
+        circles.unshift(end);
+        circles[0].setPosition(currentX, currentY);
+        var dead = circles[0].move(distance, direction);
+        if(dead==1){
+            //reset();
         }
-        for (z = 1; z < circles.length; z++){
-            checkOverlap(circles[0],circles[z]);
+
+
+        for (z = 1; z < circles.length; z++) {
+            checkOverlap(circles[0], circles[z]);
         }
-    }, 100);
+    }, speed);
 }
 
 
@@ -105,8 +117,9 @@ function checkContact() {
                     (y1 + z1) >= y2 && (y1 + z1) <= (y2 + z2))
             ) {
         food.die();
-        increaseLength(2);
-        distance = distance + 2;
+        increaseLength(2, x1, y1);
+        speed -= 10;
+        moveSnake();
         spawnFood();
     }
 }
@@ -135,10 +148,10 @@ function spawnFood() {
     food = new Sprite("red", 22, randomNumber(0, (window.innerWidth - 11)), randomNumber(0, (window.innerHeight - 11)), "square");
     food.init();
 }
-function increaseLength(howMany) {
+function increaseLength(howMany, x, y) {
     for (c = 0; c < howMany; c++) {
 
-        var circ = new Sprite(colour, 11, randomNumber(0, (window.innerWidth - 330)), randomNumber(0, (window.innerHeight - 330)), "circle");
+        var circ = new Sprite(colour, 11, x, y, "circle");
 
         circ.init();
 

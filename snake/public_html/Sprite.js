@@ -65,6 +65,7 @@ function Sprite(colour, radius, x, y, shape) {
 
 
             alert("you have died :(")
+            return 1;
             this.x = window.innerWidth / 2;
             this.y = window.innerHeight / 2;
         }
