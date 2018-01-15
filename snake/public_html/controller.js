@@ -8,10 +8,12 @@ var current = 0;
 var colour = "yellow";
 var timer;
 var speed = 100;
+var radius;
 
 function run() {
     var x = window.innerWidth / 2;
     var y = window.innerHeight / 2;
+    radius = window.innerWidth / 145;
 
     // creats new food
     spawnFood();
@@ -19,7 +21,7 @@ function run() {
     // creats circles 
     for (c = 0; c < snakeLength; c++) {
 
-        circles[c] = new Sprite(colour, 11, randomNumber(0, (window.innerWidth - 330)), randomNumber(0, (window.innerHeight - 330)), "circle");
+        circles[c] = new Sprite(colour, radius, randomNumber(0, (window.innerWidth - 330)), randomNumber(0, (window.innerHeight - 330)), "circle");
 
         circles[c].init();
 
@@ -47,14 +49,16 @@ function moveSnake() {
         var end = circles.pop();
         circles.unshift(end);
         circles[0].setPosition(currentX, currentY);
-        var dead = circles[0].move(distance, direction);
-        if(dead==1){
-            //reset();
+        dead=circles[0].move(distance, direction);
+        if (dead == 1) {
+        reset();
         }
 
+        if (snakeLength > 5) {
 
-        for (z = 1; z < circles.length; z++) {
-            checkOverlap(circles[0], circles[z]);
+            for (z = 1; z < circles.length; z++) {
+                checkOverlap(circles[0], circles[z]);
+            }
         }
     }, speed);
 }
@@ -102,7 +106,7 @@ function randomNumber(min, max) {
     return Math.floor((Math.random() * (max - min))) + min;
 
 }
-//checks if any of the sprites are touching
+//checks if any of the snake is touching the food
 function checkContact() {
     var x1 = circles[0].x;
     var y1 = circles[0].y;
@@ -117,7 +121,7 @@ function checkContact() {
                     (y1 + z1) >= y2 && (y1 + z1) <= (y2 + z2))
             ) {
         food.die();
-        increaseLength(2, x1, y1);
+        increaseLength(2, circles[circles.length -1].x, circles[circles.length -1].y);
         speed -= 10;
         moveSnake();
         spawnFood();
@@ -137,7 +141,7 @@ function checkOverlap(c1, c2) {
             ((x1 + z1) >= x2 && (x1 + z1) <= (x2 + z2) &&
                     (y1 + z1) >= y2 && (y1 + z1) <= (y2 + z2))
             ) {
-        alert("hi");
+        reset();
     }
 }
 
@@ -145,13 +149,13 @@ function checkOverlap(c1, c2) {
 //spawns new food
 
 function spawnFood() {
-    food = new Sprite("red", 22, randomNumber(0, (window.innerWidth - 11)), randomNumber(0, (window.innerHeight - 11)), "square");
+    food = new Sprite("red", radius*2, randomNumber(0, (window.innerWidth - 11)), randomNumber(0, (window.innerHeight - 11)), "square");
     food.init();
 }
 function increaseLength(howMany, x, y) {
     for (c = 0; c < howMany; c++) {
 
-        var circ = new Sprite(colour, 11, x, y, "circle");
+        var circ = new Sprite(colour, radius, x, y, "circle");
 
         circ.init();
 
@@ -160,4 +164,22 @@ function increaseLength(howMany, x, y) {
 
     }
     snakeLength = snakeLength + howMany;
+}
+function reset() {
+    alert("you have died :(");
+    //deletes all the circles 
+    for (z = 0; z < circles.length; z++) {
+        circles[z].die();
+    }
+    circles=[];
+    //pop menu displaying score counter
+    //reset snake.Length
+    snakeLength=1;
+    //set speed back to original 
+    speed=100;
+    //delete food
+    food.die();
+    //respawn 
+    run();
+    
 }

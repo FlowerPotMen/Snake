@@ -64,7 +64,7 @@ function Sprite(colour, radius, x, y, shape) {
         if (this.x <= 0 || this.x >= window.innerWidth || this.y <= 0 || this.y >= window.innerHeight) {
 
 
-            alert("you have died :(")
+            
             return 1;
             this.x = window.innerWidth / 2;
             this.y = window.innerHeight / 2;
