@@ -2,6 +2,14 @@
 var b;
 var speed = 500;
 var timer;
+var grid = [];
+
+function init() {
+    grid = new Grid;
+    grid.init();
+
+    run();
+}
 /**
  * starts the game
  * @returns {undefined}
@@ -52,8 +60,11 @@ function moveBlock(block) {
     }
     timer = setInterval(function () {
         bottom = block.move("down");
+        //have I hit the bottom of the screen
         if (bottom == 1) {
+            console.log(block.left - (window.innerWidth / 2 - (block.size * 11)));
             run();
         }
     }, speed);
 }
+    

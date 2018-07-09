@@ -1,7 +1,7 @@
 function Block() {
     this.div = document.createElement("DIV");
     this.size = 20;
-    this.shapes = ['Line', 'L', 'Square', 'ZigZag'];
+    this.shapes = [ 'ZigZag'];
     this.colours = ['blue', 'red', 'green', 'yellow', 'purple'];
     this.ctx;
     this.spin = 0;
@@ -30,12 +30,14 @@ function Block() {
             blockWidth = this.width;
         }
         
-        if ((this.top + blockHeight) > grid.height) {
+        
+        if ((this.top + blockHeight) > grid.height + 10) {
             //test if we have hit the bottom^^
+            
             this.top = this.top - this.size;
             return 1;
-        } else if ((this.left + blockWidth) >= (window.innerWidth / 2) + (this.size * 11)) {
-            //tests if we have hit the right side^^ 
+        } else if ((this.left + blockWidth) >= (window.innerWidth / 2) + (grid.width / 2)+15) {
+            //tests if we have hit the right side^^
             this.left = this.left - this.size;
         } else if (this.left < ((window.innerWidth / 2) - (this.size * 11))) {
             //tests if we have hit the left side^^
@@ -53,7 +55,6 @@ function Block() {
 
         //if roated with odd height then adjust
         if ((this.spin == 90 || this.spin == 270) && (this.blocksHigh % 2)) {
-            console.log('hi');
             this.move("left", (this.size / 2));
             this.move("down", ((0 - this.size) / 2));
 
