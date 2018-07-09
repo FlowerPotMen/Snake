@@ -1,7 +1,7 @@
 function Block() {
     this.div = document.createElement("DIV");
     this.size = 20;
-    this.shapes = [ 'ZigZag'];
+    this.shapes = ['ZigZag', 'L', 'Line', 'Square', 'T'];
     this.colours = ['blue', 'red', 'green', 'yellow', 'purple'];
     this.ctx;
     this.spin = 0;
@@ -15,11 +15,13 @@ function Block() {
             distance = this.size;
         }
         if (direction == "down") {
+            beep.play();
             this.top = this.top + distance;
         } else if (direction == "left") {
             this.left = this.left - distance;
         } else if (direction == "right") {
             this.left = this.left + distance;
+
         }
         //makes block hit the bottom of the screen no matter how far rotated
         if (this.spin == 90 || this.spin == 270) {
@@ -29,14 +31,14 @@ function Block() {
             blockHeight = this.height;
             blockWidth = this.width;
         }
-        
-        
+
+
         if ((this.top + blockHeight) > grid.height + 10) {
             //test if we have hit the bottom^^
-            
+
             this.top = this.top - this.size;
             return 1;
-        } else if ((this.left + blockWidth) >= (window.innerWidth / 2) + (grid.width / 2)+15) {
+        } else if ((this.left + blockWidth) >= (window.innerWidth / 2) + (grid.width / 2) + 15) {
             //tests if we have hit the right side^^
             this.left = this.left - this.size;
         } else if (this.left < ((window.innerWidth / 2) - (this.size * 11))) {
@@ -66,7 +68,7 @@ function Block() {
     this.spawn = function () {
         //selects a random shape and colour
         //display on screen
-        [this.top,this.left] = grid.cellLoc(11,0);
+        [this.top, this.left] = grid.cellLoc(11, 0);
         this.div.style.position = "absolute";
 
         this.div.style.left = this.left;
@@ -87,7 +89,9 @@ function Block() {
         } else if (this.shapes[shape] == 'ZigZag') {
             this.ZigZag(this.ctx, this.colours[colour]);
         } else if (this.shapes[shape] == 'Line') {
-          this.Line(this.ctx, this.colours[colour]);
+            this.Line(this.ctx, this.colours[colour]);
+        } else if (this.shapes[shape] == 'T') {
+            this.T(this.ctx, this.colours[colour]);
         }
         this.div.appendChild(c);
         document.body.appendChild(this.div);
@@ -155,6 +159,23 @@ function Block() {
         ctx.rect(this.size, 0, this.size, this.size);
         ctx.rect(this.size * 2, 0, this.size, this.size);
         ctx.rect(this.size * 3, 0, this.size, this.size);
+        ctx.fillStyle = colour;
+        ctx.fill();
+        ctx.stroke();
+        this.width = this.size * this.blocksWide;
+        this.height = this.size * this.blocksHigh;
+        this.div.style.height = this.height;
+        this.div.style.width = this.width;
+    }
+    this.T = function (ctx, colour) {
+        this.blocksWide = 3;
+        this.blocksHigh = 3;
+
+        ctx.rect(0, 0, this.size, this.size);
+        ctx.rect(this.size, 0, this.size, this.size);
+        ctx.rect(this.size * 2, 0, this.size, this.size);
+        ctx.rect(this.size, this.size, this.size, this.size);
+        ctx.rect(this.size, this.size * 2, this.size, this.size);
         ctx.fillStyle = colour;
         ctx.fill();
         ctx.stroke();

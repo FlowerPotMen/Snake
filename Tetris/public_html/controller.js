@@ -3,10 +3,26 @@ var b;
 var speed = 500;
 var timer;
 var grid = [];
+var beep;
 
 function init() {
     grid = new Grid;
     grid.init();
+
+
+    //loads up sounds
+    beep = document.createElement("audio");
+    beep.src = "sounds/beep.mp3";
+    beep.setAttribute("preload", "auto");
+    beep.setAttribute("controls", "none");
+    beep.style.display = "none";
+    document.body.appendChild(beep);
+//    this.play = function () {
+//        this.sound.play();
+//    }
+//    this.stop = function () {
+//        this.sound.pause();
+//    }
 
     run();
 }
@@ -62,7 +78,7 @@ function moveBlock(block) {
         bottom = block.move("down");
         //have I hit the bottom of the screen
         if (bottom == 1) {
-            console.log(block.left - (window.innerWidth / 2 - (block.size * 11)));
+            beep.play();
             run();
         }
     }, speed);
